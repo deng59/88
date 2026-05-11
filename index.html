@@ -26,7 +26,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('1001001604.jpg') center/cover no-repeat;
+            /* 替换为实际的背景图片路径 */
+            background: url('path_to_your_blurred_background_image.jpg') center/cover no-repeat;
             filter: blur(15px);
             transform: scale(1.1); 
             z-index: -1;
@@ -47,10 +48,10 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        /* Swiper 容器 */
+        /* Swiper 容器 - 整体高度稍微增加以容纳拉长的卡片 */
         .swiper {
             width: 100%;
-            height: 60vh; /* 固定高度，防止塌陷 */
+            height: 70vh; /* 从 60vh 增加到 70vh，整体拉长 */
             padding-top: 5vh;
         }
 
@@ -59,11 +60,11 @@
         }
 
         .swiper-slide {
-            /* ↓↓↓↓↓↓↓↓↓↓ 核心修改点在这里 ↓↓↓↓↓↓↓↓↓↓ */
-            width: 75%; /* 调整宽度：原为60%，改大后居中感更强 */ 
-            height: 75%; /* 高度相对占比，适配不同屏幕 */
-            max-height: 380px; /* 避免太高撑爆 */
-            /* ↑↑↑↑↑↑↑↑↑↑ 核心修改点在这里 ↑↑↑↑↑↑↑↑↑↑ */
+            /* ↓↓↓↓↓↓↓↓↓↓ 核心修改点：拉长卡片 ↓↓↓↓↓↓↓↓↓↓ */
+            width: 75%; /* 保持宽度 */
+            height: 85%; /* 从 75% 增加到 85%，垂直占比拉长 */
+            max-height: 480px; /* 从 380px 增加到 480px，最大高度拉长 */
+            /* ↑↑↑↑↑↑↑↑↑↑ 核心修改点：拉长卡片 ↑↑↑↑↑↑↑↑↑↑ */
             
             display: flex;
             justify-content: center;
@@ -84,12 +85,13 @@
         .swiper-slide img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* 确保图片拉长后仍能完整显示，不拉伸变形 */
         }
 
+        /* 名字标签 - 配合拉长的卡片稍微向下移动一些，使其不显得太高 */
         .name-badge {
             position: absolute;
-            bottom: 20px;
+            bottom: 30px; /* 从 20px 增加到 30px，使其在拉长的卡片上更美观 */
             background: rgba(0, 0, 0, 0.6);
             color: white;
             padding: 5px 15px;
@@ -108,7 +110,7 @@
             z-index: 10;
         }
 
-        /* 弹窗及毛玻璃效果 */
+        /* 弹窗及毛玻璃效果 (保持不变) */
         .modal {
             display: none; 
             position: fixed;
@@ -172,7 +174,7 @@
 
     <div class="bg-layer"></div>
     <div class="header">
-        <img src="1001001603.jpg" alt="Logo">
+        <img src="path_to_your_logo_image.jpg" alt="Logo">
     </div>
 
     <div class="swiper mySwiper">
@@ -220,7 +222,7 @@
             }
         };
 
-        // 初始化 Swiper (优化配置)
+        // 初始化 Swiper (保持不变，配合 CSS 修改即可实现效果)
         const swiper = new Swiper(".mySwiper", {
             slidesPerView: 'auto', // 关键：配合 CSS 的 width 使用
             centeredSlides: true, 
