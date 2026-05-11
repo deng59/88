@@ -6,194 +6,77 @@
     <title>四川天一学院 - 人物介绍</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body, html {
-            width: 100%;
-            height: 100%;
-            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; overflow: hidden; display: flex; flex-direction: column; }
+        
         .bg-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: url('1001001604.jpg') center/cover no-repeat;
-            filter: blur(15px);
-            transform: scale(1.1); 
-            z-index: -1;
+            filter: blur(15px); transform: scale(1.1); z-index: -1;
         }
 
         .header {
-            flex-shrink: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding-top: 20px;
-            height: 90px;
-            z-index: 10;
-            position: relative;
+            flex-shrink: 0; display: flex; justify-content: center; align-items: center;
+            padding-top: 20px; height: 90px; z-index: 10; position: relative;
         }
+        .header img { width: 80px; height: 80px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
 
-        .header img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
+        .swiper { flex-grow: 1; width: 100%; height: 0; }
+        .swiper-wrapper { align-items: center; }
 
-        .swiper {
-            flex-grow: 1;
-            width: 100%;
-            height: 0;
-        }
-
-        .swiper-wrapper {
-            align-items: center;
-        }
-
+        /* ↓↓↓↓↓↓↓↓↓↓ 核心修改：移除固定 width，改用百分比配合 slidesPerView ↓↓↓↓↓↓↓↓↓↓ */
         .swiper-slide {
-            width: 75%; 
+            width: 70%; /* 这里不再是 'auto' */
             height: auto;
             aspect-ratio: 4 / 5;
             max-height: 480px;
             max-width: 320px;
-            
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 15px;
-            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 15px; overflow: hidden;
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            position: relative;
-            transition: all 0.3s ease;
+            position: relative; transition: all 0.3s ease;
         }
+        /* ↑↑↑↑↑↑↑↑↑↑ 核心修改结束 ↑↑↑↑↑↑↑↑↑↑ */
 
-        .swiper-slide:not(.swiper-slide-active) {
-            transform: scale(0.85);
-            opacity: 0.6;
-        }
-
-        .swiper-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .swiper-slide:not(.swiper-slide-active) { transform: scale(0.85); opacity: 0.6; }
+        .swiper-slide img { width: 100%; height: 100%; object-fit: cover; }
 
         .name-badge {
-            position: absolute;
-            bottom: 15px;
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 16px;
+            position: absolute; bottom: 15px; background: rgba(0,0,0,0.6);
+            color: white; padding: 5px 15px; border-radius: 20px; font-size: 16px;
             pointer-events: none;
         }
 
         .hint {
-            flex-shrink: 0;
-            text-align: center;
-            color: #fff;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            position: relative;
-            z-index: 10;
+            flex-shrink: 0; text-align: center; color: #fff; height: 40px;
+            display: flex; align-items: center; justify-content: center; font-size: 14px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5); position: relative; z-index: 10;
         }
 
-        .modal {
-            display: none; 
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal.show {
-            display: flex;
-            opacity: 1;
-        }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal.show { display: flex; opacity: 1; }
 
         .modal-content {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            border-radius: 20px;
-            padding: 30px 20px;
-            width: 100%;
-            max-width: 400px;
-            max-height: 70vh;
-            overflow-y: auto;
-            color: #333;
-            position: relative;
+            background: rgba(255,255,255,0.25); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);
+            border-radius: 20px; padding: 30px 20px; width: 100%; max-width: 400px;
+            max-height: 70vh; overflow-y: auto; color: #333; position: relative;
         }
-
-        .modal-content h2 {
-            margin-bottom: 15px;
-            color: #111;
-            text-align: center;
-        }
-
-        .modal-content p {
-            line-height: 1.6;
-            font-size: 15px;
-            text-align: justify;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-            text-decoration: none;
-        }
+        .modal-content h2 { margin-bottom: 15px; color: #111; text-align: center; }
+        .modal-content p { line-height: 1.6; font-size: 15px; text-align: justify; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; font-weight: bold; color: #333; text-decoration: none; }
     </style>
 </head>
 <body>
 
     <div class="bg-layer"></div>
-    <div class="header">
-        <img src="1001001603.jpg" alt="Logo">
-    </div>
+    <div class="header"><img src="1001001603.jpg" alt="Logo"></div>
 
     <div class="swiper mySwiper">
         <div class="swiper-wrapper">
-            <div class="swiper-slide" data-id="1">
-                <img src="person1.jpg" alt="包娜巧">
-                <div class="name-badge">包娜巧</div>
-            </div>
-            <div class="swiper-slide" data-id="2">
-                <img src="person2.jpg" alt="万小松">
-                <div class="name-badge">万小松</div>
-            </div>
-            <div class="swiper-slide" data-id="3">
-                <img src="person3.jpg" alt="孔繁慧">
-                <div class="name-badge">孔繁慧</div>
-            </div>
+            <div class="swiper-slide" data-id="1"><img src="person1.jpg" alt="包娜巧"><div class="name-badge">包娜巧</div></div>
+            <div class="swiper-slide" data-id="2"><img src="person2.jpg" alt="万小松"><div class="name-badge">万小松</div></div>
+            <div class="swiper-slide" data-id="3"><img src="person3.jpg" alt="孔繁慧"><div class="name-badge">孔繁慧</div></div>
         </div>
     </div>
     
@@ -211,22 +94,22 @@
     <script>
         // 人物数据源 (保持不变)
         const personsData = {
-            "1": { name: "包娜巧", desc: "..." }, /* 完整数据请保留原样 */
-            "2": { name: "万小松", desc: "..." },
-            "3": { name: "孔繁慧", desc: "..." }
+            "1": { name: "包娜巧", desc: "包娜巧，女，中共党员..." },
+            "2": { name: "万小松", desc: "万小松，男，土家族..." },
+            "3": { name: "孔繁慧", desc: "孔繁慧，副教授..." }
         };
 
-        //↓↓↓↓↓↓↓↓↓↓↓↓ 重要修改区域 ↓↓↓↓↓↓↓↓↓↓↓↓
+        // ↓↓↓↓↓↓↓↓↓↓↓↓ 核心修改：配置改为 slidesPerView: 1.2 ↓↓↓↓↓↓↓↓↓↓↓↓
         const swiper = new Swiper(".mySwiper", {
-            slidesPerView: 'auto', 
-            centeredSlides: true, 
-            spaceBetween: 8,       /* ⭐ 将间距改为 8px (之前是15px)，图片之间更紧凑 */
-            loop: true,            /* ⭐ 开启无限循环：第一张左滑可到最后一张，最后一张右滑可到第一张 */
-            loopedSlides: 3,       /* ⭐ 如果使用 loop，建议加上这个，防止复制出现bug */
+            slidesPerView: 1.2,    /* 之前是 'auto'，改为 1.2 能完美支持 loop */
+            centeredSlides: true,
+            spaceBetween: 8,       /* 保持紧凑间距 */
+            loop: true,            /* 开启无限循环 */
+            loopedSlides: 3,       /* 明确需要复制的幻灯片数量 */
         });
-        //↑↑↑↑↑↑↑↑↑↑↑↑ 重要修改区域 ↑↑↑↑↑↑↑↑↑↑↑↑
+        // ↑↑↑↑↑↑↑↑↑↑↑↑ 核心修改结束 ↑↑↑↑↑↑↑↑↑↑↑↑
 
-        // ... 弹窗和双击逻辑保持原有代码不变 ...
+        // 弹窗逻辑
         const modal = document.getElementById('infoModal');
         const modalName = document.getElementById('modalName');
         const modalDesc = document.getElementById('modalDesc');
@@ -241,30 +124,43 @@
             }
         }
 
-        closeBtn.addEventListener('click', () => {
-            modal.classList.remove('show');
+        closeBtn.addEventListener('click', () => { modal.classList.remove('show'); });
+
+        // 双击逻辑优化 (兼容 loop 复制模式)
+        // 使用 Swiper 事件监听实时更新的活动索引，避免复制 DOM 的问题
+        let currentActiveId = "1"; // 默认第一个
+
+        swiper.on('slideChange', function () {
+            // 获取当前激活的 slide 的真实 DOM 元素
+            const activeSlide = swiper.slides[swiper.activeIndex];
+            if (activeSlide) {
+                currentActiveId = activeSlide.getAttribute('data-id');
+            }
         });
 
-        let lastTapTime = 0;
-        const slides = document.querySelectorAll('.swiper-slide');
-        
-        slides.forEach(slide => {
-            slide.addEventListener('dblclick', function() {
-                if(this.classList.contains('swiper-slide-active')) {
-                    openModal(this.getAttribute('data-id'));
-                }
-            });
+        // 双击事件监听 (优化)
+        const slidesContainer = document.querySelector('.swiper-wrapper');
+        slidesContainer.addEventListener('dblclick', function(e) {
+            // 找到点击的最近 slide
+            const targetSlide = e.target.closest('.swiper-slide');
+            if (targetSlide && targetSlide.classList.contains('swiper-slide-active')) {
+                openModal(currentActiveId);
+            }
+        });
 
-            slide.addEventListener('touchend', function(e) {
-                if(!this.classList.contains('swiper-slide-active')) return;
-                const currentTime = new Date().getTime();
-                const tapLength = currentTime - lastTapTime;
-                if (tapLength < 400 && tapLength > 0) {
-                    openModal(this.getAttribute('data-id'));
-                    e.preventDefault(); 
-                }
-                lastTapTime = currentTime;
-            });
+        // 移动端触摸双击
+        let lastTapTime = 0;
+        slidesContainer.addEventListener('touchend', function(e) {
+            const targetSlide = e.target.closest('.swiper-slide');
+            if (!targetSlide || !targetSlide.classList.contains('swiper-slide-active')) return;
+
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTapTime;
+            if (tapLength < 400 && tapLength > 0) {
+                openModal(currentActiveId);
+                e.preventDefault(); 
+            }
+            lastTapTime = currentTime;
         });
     </script>
 </body>
