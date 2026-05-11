@@ -17,10 +17,9 @@
             height: 100%;
             font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
             overflow: hidden; 
-            background-color: #f5f5f5;
         }
 
-        /* 背景层 - 改为淡化处理 */
+        /* 虚化背景层 */
         .bg-layer {
             position: absolute;
             top: 0;
@@ -28,22 +27,11 @@
             width: 100%;
             height: 100%;
             background: url('1001001604.jpg') center/cover no-repeat;
-            z-index: -2;
-        }
-
-        /* 用半透明的白色遮罩层实现背景“淡化”效果 */
-        .bg-layer::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.65); /* 数值 0.65 可调整，越大背景越淡 */
+            filter: blur(15px);
+            transform: scale(1.1); 
             z-index: -1;
         }
 
-        /* 顶部 Logo */
         .header {
             width: 100%;
             text-align: center;
@@ -53,36 +41,41 @@
         }
 
         .header img {
-            width: 90px; 
+            width: 90px;
             height: 90px;
             border-radius: 50%;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            background-color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         /* Swiper 容器 */
         .swiper {
             width: 100%;
+            height: 60vh; /* 固定高度，防止塌陷 */
             padding-top: 5vh;
-            padding-bottom: 30px;
+        }
+
+        .swiper-wrapper {
+            align-items: center; /* 确保卡片垂直居中 */
         }
 
         .swiper-slide {
-            width: 65vw; /* 明确指定占据屏幕 65% 的宽度 */
-            height: 55vh; /* 高度根据屏幕自适应 */
-            max-height: 450px;
+            /* ↓↓↓↓↓↓↓↓↓↓ 核心修改点在这里 ↓↓↓↓↓↓↓↓↓↓ */
+            width: 75%; /* 调整宽度：原为60%，改大后居中感更强 */ 
+            height: 75%; /* 高度相对占比，适配不同屏幕 */
+            max-height: 380px; /* 避免太高撑爆 */
+            /* ↑↑↑↑↑↑↑↑↑↑ 核心修改点在这里 ↑↑↑↑↑↑↑↑↑↑ */
+            
             display: flex;
             justify-content: center;
             align-items: center;
             transition: all 0.3s ease;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
             position: relative;
-            background-color: #fff;
         }
 
-        /* 未居中的卡片缩小并增加透明度 */
+        /* 未居中的卡片稍微缩小一点 */
         .swiper-slide:not(.swiper-slide-active) {
             transform: scale(0.85);
             opacity: 0.6;
@@ -91,32 +84,26 @@
         .swiper-slide img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 保证人物照片铺满卡片且不变形 */
+            object-fit: cover;
         }
 
-        /* 姓名牌绝对居中 */
         .name-badge {
             position: absolute;
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%); /* 依靠这个属性实现绝对水平居中 */
-            background: rgba(0, 0, 0, 0.55);
+            background: rgba(0, 0, 0, 0.6);
             color: white;
-            padding: 6px 20px;
+            padding: 5px 15px;
             border-radius: 20px;
-            font-size: 15px;
-            letter-spacing: 1px;
+            font-size: 16px;
             pointer-events: none;
-            white-space: nowrap;
         }
 
-        /* 提示文字 */
         .hint {
             text-align: center;
-            color: #333;
-            margin-top: 10px;
-            font-size: 13px;
-            font-weight: bold;
+            color: #fff;
+            margin-top: 20px;
+            font-size: 14px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
             position: relative;
             z-index: 10;
         }
@@ -143,16 +130,16 @@
         }
 
         .modal-content {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
             border-radius: 20px;
-            padding: 30px 25px;
+            padding: 30px 20px;
             width: 100%;
             max-width: 400px;
-            max-height: 75vh;
+            max-height: 70vh;
             overflow-y: auto;
             color: #333;
             position: relative;
@@ -165,7 +152,7 @@
         }
 
         .modal-content p {
-            line-height: 1.7;
+            line-height: 1.6;
             font-size: 15px;
             text-align: justify;
         }
@@ -176,7 +163,7 @@
             right: 20px;
             font-size: 24px;
             font-weight: bold;
-            color: #666;
+            color: #333;
             text-decoration: none;
         }
     </style>
@@ -184,7 +171,6 @@
 <body>
 
     <div class="bg-layer"></div>
-
     <div class="header">
         <img src="1001001603.jpg" alt="Logo">
     </div>
@@ -206,7 +192,7 @@
         </div>
     </div>
     
-    <div class="hint">👈 左右滑动，双击人物查看详情 👉</div>
+    <div class="hint">👈 左右滑动选择人物，双击查看详情 👉</div>
 
     <div class="modal" id="infoModal">
         <div class="modal-content">
@@ -218,7 +204,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
-        // 人物数据源
+        // 人物数据源 (保持不变)
         const personsData = {
             "1": {
                 name: "包娜巧",
@@ -234,16 +220,15 @@
             }
         };
 
-        // 初始化 Swiper
+        // 初始化 Swiper (优化配置)
         const swiper = new Swiper(".mySwiper", {
-            slidesPerView: 'auto', 
-            centeredSlides: true,  
-            spaceBetween: 20,     
-            loop: true,           // 【核心修复】开启循环模式，保证每一张都能绝对居中，避免第一张贴近屏幕边缘
-            slideToClickedSlide: true // 点击两侧露出的卡片，会自动将其居中
+            slidesPerView: 'auto', // 关键：配合 CSS 的 width 使用
+            centeredSlides: true, 
+            spaceBetween: 15,      // 减少间距，视觉上更紧凑
+            loop: false,           
         });
 
-        // 弹窗逻辑
+        // 弹窗逻辑 (保持不变)
         const modal = document.getElementById('infoModal');
         const modalName = document.getElementById('modalName');
         const modalDesc = document.getElementById('modalDesc');
@@ -262,45 +247,30 @@
             modal.classList.remove('show');
         });
 
-        // 手机端双击 (Double Tap) 逻辑支持
+        // 手机端双击 (Double Tap) 逻辑 (保持不变)
         let lastTapTime = 0;
+        const slides = document.querySelectorAll('.swiper-slide');
         
-        // 由于开启了 loop 模式，DOM 节点会被复制，因此需要使用事件委托绑定到 wrapper 上
-        document.querySelector('.swiper-wrapper').addEventListener('touchend', function(e) {
-            const slide = e.target.closest('.swiper-slide');
-            if(!slide) return;
-            
-            // 只响应当前居中的卡片
-            if(!slide.classList.contains('swiper-slide-active')) return;
-
-            const currentTime = new Date().getTime();
-            const tapLength = currentTime - lastTapTime;
-            
-            if (tapLength < 400 && tapLength > 0) {
-                // Swiper 循环模式下会添加 data-swiper-slide-index 属性来记录真实索引
-                let realId = slide.getAttribute('data-swiper-slide-index') || slide.getAttribute('data-id');
-                // 如果是从 index 取出来的（0开头），则需要 +1 匹配我们的数据字典
-                if (slide.hasAttribute('data-swiper-slide-index')) {
-                    realId = parseInt(realId) + 1;
+        slides.forEach(slide => {
+            // 兼容 PC 端双击
+            slide.addEventListener('dblclick', function() {
+                if(this.classList.contains('swiper-slide-active')) {
+                    openModal(this.getAttribute('data-id'));
                 }
-                openModal(realId.toString());
-                e.preventDefault(); 
-            }
-            lastTapTime = currentTime;
-        });
+            });
 
-        // 电脑端双击兼容（事件委托）
-        document.querySelector('.swiper-wrapper').addEventListener('dblclick', function(e) {
-            const slide = e.target.closest('.swiper-slide');
-            if(!slide) return;
-
-            if(slide.classList.contains('swiper-slide-active')) {
-                let realId = slide.getAttribute('data-swiper-slide-index') || slide.getAttribute('data-id');
-                if (slide.hasAttribute('data-swiper-slide-index')) {
-                    realId = parseInt(realId) + 1;
+            // 兼容移动端触摸双击
+            slide.addEventListener('touchend', function(e) {
+                if(!this.classList.contains('swiper-slide-active')) return;
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTapTime;
+                
+                if (tapLength < 400 && tapLength > 0) {
+                    openModal(this.getAttribute('data-id'));
+                    e.preventDefault(); 
                 }
-                openModal(realId.toString());
-            }
+                lastTapTime = currentTime;
+            });
         });
     </script>
 </body>
