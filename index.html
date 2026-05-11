@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>四川天一学院 - 人物介绍</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            overflow: hidden; /* 防止页面整体滚动 */
+        }
+
+        /* 虚化背景层 */
+        .bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* 请确保 1001001604.jpg 和 index.html 在同一目录下 */
+            background: url('1001001604.jpg') center/cover no-repeat;
+            filter: blur(15px); /* 虚化效果 */
+            transform: scale(1.1); /* 放大一点防止虚化出现白边 */
+            z-index: -1;
+        }
+
+        /* 顶部 Logo */
+        .header {
+            width: 100%;
+            text-align: center;
+            padding-top: 10vh;
+            z-index: 10;
+            position: relative;
+        }
+
+        .header img {
+            width: 100px; /* 根据实际观感调整 Logo 大小 */
+            height: 100px;
+            border-radius: 50%; /* 让 Logo 呈圆形 */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Swiper 容器 */
+        .swiper {
+            width: 100%;
+            padding-top: 10vh;
+            padding-bottom: 50px;
+        }
+
+        .swiper-slide {
+            width: 60%; /* 决定两侧露出多少，60%说明中间占大头，两侧各漏出20% */
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        /* 未居中的卡片稍微缩小一点 */
+        .swiper-slide:not(.swiper-slide-active) {
+            transform: scale(0.85);
+            opacity: 0.6;
+        }
+
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .name-badge {
+            position: absolute;
+            bottom: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 16px;
+            pointer-events: none;
+        }
+
+        /* 提示文字 */
+        .hint {
+            text-align: center;
+            color: #fff;
+            margin-top: 20px;
+            font-size: 14px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* 弹窗及毛玻璃效果 */
+        .modal {
+            display: none; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* 核心毛玻璃 CSS 效果 */
+        .modal-content {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 30px 20px;
+            width: 100%;
+            max-width: 400px;
+            max-height: 70vh;
+            overflow-y: auto;
+            color: #333;
+            position: relative;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 15px;
+            color: #111;
+            text-align: center;
+        }
+
+        .modal-content p {
+            line-height: 1.6;
+            font-size: 15px;
+            text-align: justify;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-layer"></div>
+
+    <div class="header">
+        <img src="1001001603.jpg" alt="Logo">
+    </div>
+
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" data-id="1">
+                <img src="person1.jpg" alt="包娜巧">
+                <div class="name-badge">包娜巧</div>
+            </div>
+            <div class="swiper-slide" data-id="2">
+                <img src="person2.jpg" alt="万小松">
+                <div class="name-badge">万小松</div>
+            </div>
+            <div class="swiper-slide" data-id="3">
+                <img src="person3.jpg" alt="孔繁慧">
+                <div class="name-badge">孔繁慧</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="hint">👈 左右滑动选择人物，双击查看详情 👉</div>
+
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <a href="javascript:void(0)" class="close-btn" id="closeBtn">&times;</a>
+            <h2 id="modalName">名字</h2>
+            <p id="modalDesc">介绍内容...</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        // 人物数据源
+        const personsData = {
+            "1": {
+                name: "包娜巧",
+                desc: "包娜巧，女，中共党员，讲师，工程师，“双师型”教师。毕业于长沙理工大学汽车运用工程专业，曾在汽车企业担任售后服务顾问、服务经理、保险部经理、新媒体销售负责人等工作。2021年到2025年共参研课题5个，发表论文4篇，参编教材1部，2021年带领学生参加四川省新能源汽车技能大赛，获得“三等奖”，2023年参加川渝毗邻地区技能人才大赛新能源汽车电控技术，获得职工组“三等奖”，2024年带领学生参加汽车流通协会组织的汽车营销比赛获得“三等奖”，2024年参加全国职业院校汽车专业教师技能大赛-汽车检测与维修赛项获得“三等奖”，2025年参加学校教师风采大赛获得“二等奖”。 [cite: 1]"
+            },
+            "2": {
+                name: "万小松",
+                desc: "万小松，男，土家族，中共党员，毕业于西南交通大学希望学院，本科，学士学位；先后在四川希望汽车职业学院、四川五月花技师学院担任辅导员，现为四川天一学院工程学院党总支副书记，有着丰富的学生管理工作经验；工作中始终将贴近学生、了解学生作为自己学生工作的基本要求，深入细致了解学生，关心学生爱护学生，在学生中有较好的口碑和感召力。 [cite: 2]"
+            },
+            "3": {
+                name: "孔繁慧",
+                desc: "孔繁慧，副教授，中共党员，博士在读，四川天一学院工程学院副院长、工程测量教研室主任，注册全国监理工程师、建造师。从事教学工作10余年，主要承担工程测量、建筑项目管理、工程经济、混凝土结构平法识图、建设法规等课程的理论和实践教学工作。曾荣获第八届全国高等院校学生“斯维尔杯”建筑信息模型（BIM）应用技能大赛优秀指导教师、全国高等院校建筑软件技能认证大赛--BIM算量赛大赛优秀指导教师、四川省高职院校“徕拓.中纬”杯测绘技能大赛优秀指导教师和“希望杯”职业规划大赛指导教师三等奖等、教学技能大赛二等奖等。连续五年荣获四川天一学院优秀共产党员和年度考核先进个人，同时荣获首届中青年骨干教师、校级和集团优秀教师的荣誉称号。 [cite: 3]"
+            }
+        };
+
+        // 初始化 Swiper
+        const swiper = new Swiper(".mySwiper", {
+            slidesPerView: 'auto', // 自动适应卡片宽度
+            centeredSlides: true,  // 居中当前卡片
+            spaceBetween: 20,      // 卡片间距
+            loop: false,           // 是否循环播放 (考虑到只有3个人，关闭循环体验更好)
+        });
+
+        // 弹窗逻辑
+        const modal = document.getElementById('infoModal');
+        const modalName = document.getElementById('modalName');
+        const modalDesc = document.getElementById('modalDesc');
+        const closeBtn = document.getElementById('closeBtn');
+
+        function openModal(id) {
+            const data = personsData[id];
+            if(data) {
+                modalName.innerText = data.name;
+                modalDesc.innerText = data.desc;
+                modal.classList.add('show');
+            }
+        }
+
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+
+        // 手机端双击 (Double Tap) 逻辑支持
+        let lastTapTime = 0;
+        const slides = document.querySelectorAll('.swiper-slide');
+        
+        slides.forEach(slide => {
+            // 兼容 PC 端双击
+            slide.addEventListener('dblclick', function() {
+                if(this.classList.contains('swiper-slide-active')) {
+                    openModal(this.getAttribute('data-id'));
+                }
+            });
+
+            // 兼容移动端触摸双击
+            slide.addEventListener('touchend', function(e) {
+                // 只允许双击当前处于中间的卡片
+                if(!this.classList.contains('swiper-slide-active')) return;
+
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTapTime;
+                
+                if (tapLength < 400 && tapLength > 0) {
+                    openModal(this.getAttribute('data-id'));
+                    e.preventDefault(); // 阻止缩放等默认行为
+                }
+                lastTapTime = currentTime;
+            });
+        });
+    </script>
+</body>
+</html>
