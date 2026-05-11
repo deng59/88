@@ -16,20 +16,31 @@
             width: 100%;
             height: 100%;
             font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            overflow: hidden; /* 防止页面整体滚动 */
+            overflow: hidden; 
+            background-color: #f5f5f5;
         }
 
-        /* 虚化背景层 */
+        /* 核心修改：背景层 - 纯图片，不加模糊 */
         .bg-layer {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            /* 请确保 1001001604.jpg 和 index.html 在同一目录下 */
             background: url('1001001604.jpg') center/cover no-repeat;
-            filter: blur(15px); /* 虚化效果 */
-            transform: scale(1.1); /* 放大一点防止虚化出现白边 */
+            z-index: -2;
+        }
+
+        /* 核心修改：用半透明的纯白色遮罩层实现背景“淡化”效果 */
+        .bg-layer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* 这里的 0.75 是淡化程度。如果你觉得背景太亮，可以改小（比如 0.6）；觉得背景干扰了文字，可以改大（比如 0.85） */
+            background-color: rgba(255, 255, 255, 0.75); 
             z-index: -1;
         }
 
@@ -37,39 +48,41 @@
         .header {
             width: 100%;
             text-align: center;
-            padding-top: 10vh;
+            padding-top: 8vh;
             z-index: 10;
             position: relative;
         }
 
         .header img {
-            width: 100px; /* 根据实际观感调整 Logo 大小 */
-            height: 100px;
-            border-radius: 50%; /* 让 Logo 呈圆形 */
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 90px; 
+            height: 90px;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            background-color: #fff;
         }
 
         /* Swiper 容器 */
         .swiper {
             width: 100%;
-            padding-top: 10vh;
-            padding-bottom: 50px;
+            padding-top: 5vh;
+            padding-bottom: 30px;
         }
 
         .swiper-slide {
-            width: 60%; /* 决定两侧露出多少，60%说明中间占大头，两侧各漏出20% */
-            height: 400px;
+            width: 65vw; 
+            height: 55vh; 
+            max-height: 450px;
             display: flex;
             justify-content: center;
             align-items: center;
             transition: all 0.3s ease;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             position: relative;
+            background-color: #fff;
         }
 
-        /* 未居中的卡片稍微缩小一点 */
         .swiper-slide:not(.swiper-slide-active) {
             transform: scale(0.85);
             opacity: 0.6;
@@ -78,27 +91,32 @@
         .swiper-slide img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; 
         }
 
+        /* 姓名牌绝对居中 */
         .name-badge {
             position: absolute;
             bottom: 20px;
-            background: rgba(0, 0, 0, 0.6);
+            left: 50%;
+            transform: translateX(-50%); 
+            background: rgba(0, 0, 0, 0.55);
             color: white;
-            padding: 5px 15px;
+            padding: 6px 20px;
             border-radius: 20px;
-            font-size: 16px;
+            font-size: 15px;
+            letter-spacing: 1px;
             pointer-events: none;
+            white-space: nowrap;
         }
 
         /* 提示文字 */
         .hint {
             text-align: center;
-            color: #fff;
-            margin-top: 20px;
-            font-size: 14px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            color: #333;
+            margin-top: 10px;
+            font-size: 13px;
+            font-weight: bold;
             position: relative;
             z-index: 10;
         }
@@ -124,18 +142,17 @@
             opacity: 1;
         }
 
-        /* 核心毛玻璃 CSS 效果 */
         .modal-content {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.85); /* 弹窗底色稍微调白一点，增加阅读清晰度 */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
             border-radius: 20px;
-            padding: 30px 20px;
+            padding: 30px 25px;
             width: 100%;
             max-width: 400px;
-            max-height: 70vh;
+            max-height: 75vh;
             overflow-y: auto;
             color: #333;
             position: relative;
@@ -148,7 +165,7 @@
         }
 
         .modal-content p {
-            line-height: 1.6;
+            line-height: 1.7;
             font-size: 15px;
             text-align: justify;
         }
@@ -159,7 +176,7 @@
             right: 20px;
             font-size: 24px;
             font-weight: bold;
-            color: #333;
+            color: #666;
             text-decoration: none;
         }
     </style>
@@ -189,7 +206,7 @@
         </div>
     </div>
     
-    <div class="hint">👈 左右滑动选择人物，双击查看详情 👉</div>
+    <div class="hint">👈 左右滑动，双击人物查看详情 👉</div>
 
     <div class="modal" id="infoModal">
         <div class="modal-content">
@@ -201,31 +218,29 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
-        // 人物数据源
         const personsData = {
             "1": {
                 name: "包娜巧",
-                desc: "包娜巧，女，中共党员，讲师，工程师，“双师型”教师。毕业于长沙理工大学汽车运用工程专业，曾在汽车企业担任售后服务顾问、服务经理、保险部经理、新媒体销售负责人等工作。2021年到2025年共参研课题5个，发表论文4篇，参编教材1部，2021年带领学生参加四川省新能源汽车技能大赛，获得“三等奖”，2023年参加川渝毗邻地区技能人才大赛新能源汽车电控技术，获得职工组“三等奖”，2024年带领学生参加汽车流通协会组织的汽车营销比赛获得“三等奖”，2024年参加全国职业院校汽车专业教师技能大赛-汽车检测与维修赛项获得“三等奖”，2025年参加学校教师风采大赛获得“二等奖”。 [cite: 1]"
+                desc: "包娜巧，女，中共党员，讲师，工程师，“双师型”教师。毕业于长沙理工大学汽车运用工程专业，曾在汽车企业担任售后服务顾问、服务经理、保险部经理、新媒体销售负责人等工作。2021年到2025年共参研课题5个，发表论文4篇，参编教材1部，2021年带领学生参加四川省新能源汽车技能大赛，获得“三等奖”，2023年参加川渝毗邻地区技能人才大赛新能源汽车电控技术，获得职工组“三等奖”，2024年带领学生参加汽车流通协会组织的汽车营销比赛获得“三等奖”，2024年参加全国职业院校汽车专业教师技能大赛-汽车检测与维修赛项获得“三等奖”，2025年参加学校教师风采大赛获得“二等奖”。"
             },
             "2": {
                 name: "万小松",
-                desc: "万小松，男，土家族，中共党员，毕业于西南交通大学希望学院，本科，学士学位；先后在四川希望汽车职业学院、四川五月花技师学院担任辅导员，现为四川天一学院工程学院党总支副书记，有着丰富的学生管理工作经验；工作中始终将贴近学生、了解学生作为自己学生工作的基本要求，深入细致了解学生，关心学生爱护学生，在学生中有较好的口碑和感召力。 [cite: 2]"
+                desc: "万小松，男，土家族，中共党员，毕业于西南交通大学希望学院，本科，学士学位；先后在四川希望汽车职业学院、四川五月花技师学院担任辅导员，现为四川天一学院工程学院党总支副书记，有着丰富的学生管理工作经验；工作中始终将贴近学生、了解学生作为自己学生工作的基本要求，深入细致了解学生，关心学生爱护学生，在学生中有较好的口碑和感召力。"
             },
             "3": {
                 name: "孔繁慧",
-                desc: "孔繁慧，副教授，中共党员，博士在读，四川天一学院工程学院副院长、工程测量教研室主任，注册全国监理工程师、建造师。从事教学工作10余年，主要承担工程测量、建筑项目管理、工程经济、混凝土结构平法识图、建设法规等课程的理论和实践教学工作。曾荣获第八届全国高等院校学生“斯维尔杯”建筑信息模型（BIM）应用技能大赛优秀指导教师、全国高等院校建筑软件技能认证大赛--BIM算量赛大赛优秀指导教师、四川省高职院校“徕拓.中纬”杯测绘技能大赛优秀指导教师和“希望杯”职业规划大赛指导教师三等奖等、教学技能大赛二等奖等。连续五年荣获四川天一学院优秀共产党员和年度考核先进个人，同时荣获首届中青年骨干教师、校级和集团优秀教师的荣誉称号。 [cite: 3]"
+                desc: "孔繁慧，副教授，中共党员，博士在读，四川天一学院工程学院副院长、工程测量教研室主任，注册全国监理工程师、建造师。从事教学工作10余年，主要承担工程测量、建筑项目管理、工程经济、混凝土结构平法识图、建设法规等课程的理论和实践教学工作。曾荣获第八届全国高等院校学生“斯维尔杯”建筑信息模型（BIM）应用技能大赛优秀指导教师、全国高等院校建筑软件技能认证大赛--BIM算量赛大赛优秀指导教师、四川省高职院校“徕拓.中纬”杯测绘技能大赛优秀指导教师和“希望杯”职业规划大赛指导教师三等奖等、教学技能大赛二等奖等。连续五年荣获四川天一学院优秀共产党员和年度考核先进个人，同时荣获首届中青年骨干教师、校级和集团优秀教师的荣誉称号。"
             }
         };
 
-        // 初始化 Swiper
         const swiper = new Swiper(".mySwiper", {
-            slidesPerView: 'auto', // 自动适应卡片宽度
-            centeredSlides: true,  // 居中当前卡片
-            spaceBetween: 20,      // 卡片间距
-            loop: false,           // 是否循环播放 (考虑到只有3个人，关闭循环体验更好)
+            slidesPerView: 'auto', 
+            centeredSlides: true,  
+            spaceBetween: 20,     
+            loop: true,           
+            slideToClickedSlide: true 
         });
 
-        // 弹窗逻辑
         const modal = document.getElementById('infoModal');
         const modalName = document.getElementById('modalName');
         const modalDesc = document.getElementById('modalDesc');
@@ -244,32 +259,39 @@
             modal.classList.remove('show');
         });
 
-        // 手机端双击 (Double Tap) 逻辑支持
         let lastTapTime = 0;
-        const slides = document.querySelectorAll('.swiper-slide');
         
-        slides.forEach(slide => {
-            // 兼容 PC 端双击
-            slide.addEventListener('dblclick', function() {
-                if(this.classList.contains('swiper-slide-active')) {
-                    openModal(this.getAttribute('data-id'));
-                }
-            });
+        document.querySelector('.swiper-wrapper').addEventListener('touchend', function(e) {
+            const slide = e.target.closest('.swiper-slide');
+            if(!slide) return;
+            
+            if(!slide.classList.contains('swiper-slide-active')) return;
 
-            // 兼容移动端触摸双击
-            slide.addEventListener('touchend', function(e) {
-                // 只允许双击当前处于中间的卡片
-                if(!this.classList.contains('swiper-slide-active')) return;
-
-                const currentTime = new Date().getTime();
-                const tapLength = currentTime - lastTapTime;
-                
-                if (tapLength < 400 && tapLength > 0) {
-                    openModal(this.getAttribute('data-id'));
-                    e.preventDefault(); // 阻止缩放等默认行为
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTapTime;
+            
+            if (tapLength < 400 && tapLength > 0) {
+                let realId = slide.getAttribute('data-swiper-slide-index') || slide.getAttribute('data-id');
+                if (slide.hasAttribute('data-swiper-slide-index')) {
+                    realId = parseInt(realId) + 1;
                 }
-                lastTapTime = currentTime;
-            });
+                openModal(realId.toString());
+                e.preventDefault(); 
+            }
+            lastTapTime = currentTime;
+        });
+
+        document.querySelector('.swiper-wrapper').addEventListener('dblclick', function(e) {
+            const slide = e.target.closest('.swiper-slide');
+            if(!slide) return;
+
+            if(slide.classList.contains('swiper-slide-active')) {
+                let realId = slide.getAttribute('data-swiper-slide-index') || slide.getAttribute('data-id');
+                if (slide.hasAttribute('data-swiper-slide-index')) {
+                    realId = parseInt(realId) + 1;
+                }
+                openModal(realId.toString());
+            }
         });
     </script>
 </body>
