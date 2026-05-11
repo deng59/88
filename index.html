@@ -20,7 +20,7 @@
             background-color: #f5f5f5;
         }
 
-        /* 核心修改：背景层 - 纯图片，不加模糊 */
+        /* 背景层 - 改为淡化处理 */
         .bg-layer {
             position: absolute;
             top: 0;
@@ -31,7 +31,7 @@
             z-index: -2;
         }
 
-        /* 核心修改：用半透明的纯白色遮罩层实现背景“淡化”效果 */
+        /* 用半透明的白色遮罩层实现背景“淡化”效果 */
         .bg-layer::after {
             content: '';
             position: absolute;
@@ -39,8 +39,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* 这里的 0.75 是淡化程度。如果你觉得背景太亮，可以改小（比如 0.6）；觉得背景干扰了文字，可以改大（比如 0.85） */
-            background-color: rgba(255, 255, 255, 0.75); 
+            background-color: rgba(255, 255, 255, 0.65); /* 数值 0.65 可调整，越大背景越淡 */
             z-index: -1;
         }
 
@@ -69,8 +68,8 @@
         }
 
         .swiper-slide {
-            width: 65vw; 
-            height: 55vh; 
+            width: 65vw; /* 明确指定占据屏幕 65% 的宽度 */
+            height: 55vh; /* 高度根据屏幕自适应 */
             max-height: 450px;
             display: flex;
             justify-content: center;
@@ -83,6 +82,7 @@
             background-color: #fff;
         }
 
+        /* 未居中的卡片缩小并增加透明度 */
         .swiper-slide:not(.swiper-slide-active) {
             transform: scale(0.85);
             opacity: 0.6;
@@ -91,7 +91,7 @@
         .swiper-slide img {
             width: 100%;
             height: 100%;
-            object-fit: cover; 
+            object-fit: cover; /* 保证人物照片铺满卡片且不变形 */
         }
 
         /* 姓名牌绝对居中 */
@@ -99,7 +99,7 @@
             position: absolute;
             bottom: 20px;
             left: 50%;
-            transform: translateX(-50%); 
+            transform: translateX(-50%); /* 依靠这个属性实现绝对水平居中 */
             background: rgba(0, 0, 0, 0.55);
             color: white;
             padding: 6px 20px;
@@ -143,7 +143,7 @@
         }
 
         .modal-content {
-            background: rgba(255, 255, 255, 0.85); /* 弹窗底色稍微调白一点，增加阅读清晰度 */
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.5);
@@ -218,6 +218,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
+        // 人物数据源
         const personsData = {
             "1": {
                 name: "包娜巧",
@@ -233,14 +234,16 @@
             }
         };
 
+        // 初始化 Swiper
         const swiper = new Swiper(".mySwiper", {
             slidesPerView: 'auto', 
             centeredSlides: true,  
             spaceBetween: 20,     
-            loop: true,           
-            slideToClickedSlide: true 
+            loop: true,           // 【核心修复】开启循环模式，保证每一张都能绝对居中，避免第一张贴近屏幕边缘
+            slideToClickedSlide: true // 点击两侧露出的卡片，会自动将其居中
         });
 
+        // 弹窗逻辑
         const modal = document.getElementById('infoModal');
         const modalName = document.getElementById('modalName');
         const modalDesc = document.getElementById('modalDesc');
@@ -259,19 +262,24 @@
             modal.classList.remove('show');
         });
 
+        // 手机端双击 (Double Tap) 逻辑支持
         let lastTapTime = 0;
         
+        // 由于开启了 loop 模式，DOM 节点会被复制，因此需要使用事件委托绑定到 wrapper 上
         document.querySelector('.swiper-wrapper').addEventListener('touchend', function(e) {
             const slide = e.target.closest('.swiper-slide');
             if(!slide) return;
             
+            // 只响应当前居中的卡片
             if(!slide.classList.contains('swiper-slide-active')) return;
 
             const currentTime = new Date().getTime();
             const tapLength = currentTime - lastTapTime;
             
             if (tapLength < 400 && tapLength > 0) {
+                // Swiper 循环模式下会添加 data-swiper-slide-index 属性来记录真实索引
                 let realId = slide.getAttribute('data-swiper-slide-index') || slide.getAttribute('data-id');
+                // 如果是从 index 取出来的（0开头），则需要 +1 匹配我们的数据字典
                 if (slide.hasAttribute('data-swiper-slide-index')) {
                     realId = parseInt(realId) + 1;
                 }
@@ -281,6 +289,7 @@
             lastTapTime = currentTime;
         });
 
+        // 电脑端双击兼容（事件委托）
         document.querySelector('.swiper-wrapper').addEventListener('dblclick', function(e) {
             const slide = e.target.closest('.swiper-slide');
             if(!slide) return;
